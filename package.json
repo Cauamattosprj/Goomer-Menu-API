@@ -1,0 +1,15 @@
+{
+  "name": "goomer-menu-api",
+  "version": "1.0.0",
+  "description": "Decidi conduzir o projeto com o seguinte cenário fictício em mente:\r 1. Esta API irá crescer exponencialmente e se tornar o núcleo principal de um grande sistema ao longo dos anos (um backend core que irá ser o pivô do sistema ofertado aos clientes finais).\r 2. Com isso em mente, mesmo que hoje ela possua poucas funcionalidades concretas, será construída tendo como principal objetivo a **escalabilidade.** Com isso, fácil manutenção, facilidade de testes, baixo acoplamento e potencial de expansão estarão sendo a principal prioridade.",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose --coverage"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

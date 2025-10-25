@@ -2,6 +2,8 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
+import configPrettier from "eslint-config-prettier";
+
 
 const config = defineConfig([
   {
@@ -21,8 +23,11 @@ const config = defineConfig([
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
+      configPrettier
     ],
     rules: {
+      "prettier/prettier": ["error"], 
+
       "@typescript-eslint/no-explicit-any": "error",
 
       "@typescript-eslint/explicit-function-return-type": [

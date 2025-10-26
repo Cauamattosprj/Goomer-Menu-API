@@ -119,7 +119,7 @@ describe("Promotion entity", () => {
 
     expect(expiringPromotion.getValidUntil()).toEqual(expirationDate);
     expect(expiringPromotion.getIsExpired()).toBe(false);
-  });
+  })
 
   it("should create promotion as expired", () => {
     const expiredPromotion = new Promotion({

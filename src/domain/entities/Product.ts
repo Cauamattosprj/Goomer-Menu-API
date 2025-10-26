@@ -1,4 +1,5 @@
 import { Promotion } from "./Promotion";
+import { v4 as uuidv4 } from "uuid";
 
 export class Product {
   private id?: string | undefined;
@@ -7,6 +8,7 @@ export class Product {
   private category: string;
   private visible: boolean = true;
   private promotions: Promotion[] = [];
+
 
   constructor(params: {
     id?: string;
@@ -17,6 +19,7 @@ export class Product {
     promotions?: Promotion[];
   }) {
     this.id = params.id;
+    this.id ??= uuidv4();
     this.name = params.name;
     this.price = params.price;
     this.category = params.category;
@@ -25,46 +28,46 @@ export class Product {
   }
 
   // Getters
-  getId() {
+  getId(): string | undefined {
     return this.id;
   }
-  getName() {
+  getName(): string {
     return this.name;
   }
-  getPrice() {
+  getPrice(): number {
     return this.price;
   }
-  getCategory() {
+  getCategory(): string {
     return this.category;
   }
-  isVisible() {
+  isVisible(): boolean {
     return this.visible;
   }
-  getPromotions() {
+  getPromotions(): Array<Promotion> {
     return this.promotions;
   }
 
   // Setters
-  setName(name: string) {
+  setName(name: string): void {
     this.name = name;
   }
-  setPrice(price: number) {
+  setPrice(price: number): void {
     if (price < 0) throw new Error("Price cannot be negative");
     this.price = price;
   }
-  setCategory(category: string) {
+  setCategory(category: string): void {
     this.category = category;
   }
-  setVisible(visible: boolean) {
+  setVisible(visible: boolean): void {
     this.visible = visible;
   }
 
   // Promoções
-  addPromotion(promotion: Promotion) {
+  addPromotion(promotion: Promotion): void {
     this.promotions.push(promotion);
   }
 
-  removePromotion(promotionId: string) {
-    this.promotions = this.promotions.filter((p) => p.getId() !== promotionId);
+  removePromotion(promotionId: string): void {
+    this.promotions = this.promotions.filter((promotion) => promotion.getId() !== promotionId);
   }
 }

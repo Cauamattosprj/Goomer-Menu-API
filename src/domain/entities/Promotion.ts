@@ -1,99 +1,108 @@
+import { v4 as uuidv4 } from "uuid";
+import { Product } from "./Product";
+
 export class Promotion {
   private id: string;
   private description: string;
-  private promotionPrice?: number | undefined;
-  private promotionPercentage?: number | undefined;
+  private discountPrice?: number | undefined;
+  private discountPercentage?: number | undefined;
   private validDays: string[];
-  private validHourStart: number[];
-  private validHourEnd: number[];
+  private validHourStart: number;
+  private validHourEnd: number;
   private validUntil?: Date | undefined;
   private isExpired: boolean = false;
-  private productIds: string[] = [];
+  private products: Product[] = [];
 
   constructor(params: {
-    id: string;
+    id?: string;
     description: string;
-    promotionPrice?: number;
-    promotionPercentage?: number;
+    discountPrice?: number;
+    discountPercentage?: number;
     validDays: string[];
-    validHourStart: number[];
-    validHourEnd: number[];
+    validHourStart: number;
+    validHourEnd: number;
     validUntil?: Date;
     isExpired?: boolean;
+    products?: Product[]
   }) {
-    this.id = params.id;
+    this.id = params.id || uuidv4();
     this.description = params.description;
-    this.promotionPrice = params.promotionPrice;
-    this.promotionPercentage = params.promotionPercentage;
+    this.discountPrice = params.discountPrice;
+    this.discountPercentage = params.discountPercentage;
     this.validDays = params.validDays;
     this.validHourStart = params.validHourStart;
     this.validHourEnd = params.validHourEnd;
     this.validUntil = params.validUntil;
     this.isExpired = params.isExpired ?? false;
+    this.products = params.products ?? []
   }
 
   // Getters
-  getId() {
+  getId(): string {
     return this.id;
   }
-  getDescription() {
+  getDescription(): string {
     return this.description;
   }
-  getPromotionPrice() {
-    return this.promotionPrice;
+  getDiscountPrice(): number | undefined {
+    return this.discountPrice;
   }
-  getPromotionPercentage() {
-    return this.promotionPercentage;
+  getDiscountPercentage(): number | undefined {
+    return this.discountPercentage;
   }
-  getValidDays() {
+  getValidDays(): string[] {
     return this.validDays;
   }
-  getValidHourStart() {
+  getValidHourStart(): number {
     return this.validHourStart;
   }
-  getValidHourEnd() {
+  getValidHourEnd(): number {
     return this.validHourEnd;
   }
-  getValidUntil() {
+  getValidUntil(): Date | undefined {
     return this.validUntil;
   }
-  getIsExpired() {
+  getIsExpired(): boolean {
     return this.isExpired;
   }
-  getProductIds() {
-    return this.productIds;
+  getProducts(): Product[] {
+    return this.products;
   }
 
   // Setters
-  setDescription(desc: string) {
+  setDescription(desc: string): void {
     this.description = desc;
   }
-  setPromotionPrice(price: number) {
-    this.promotionPrice = price;
+  setDiscountPrice(price: number): void {
+    if (price < 0) throw new Error("Promotion price cannot be negative");
+    this.discountPrice = price;
   }
-  setPromotionPercentage(percent: number) {
-    this.promotionPercentage = percent;
+
+  setDiscountPercentage(percent: number): void {
+    if (percent < 0) throw new Error("Promotion percentage cannot be negative");
+    this.discountPercentage = percent;
   }
-  setValidDays(days: string[]) {
+
+  setValidDays(days: string[]): void {
     this.validDays = days;
   }
-  setValidHours(start: number[], end: number[]) {
+  setValidHours(start: number, end: number): void {
     this.validHourStart = start;
     this.validHourEnd = end;
   }
-  setValidUntil(date: Date) {
+  setValidUntil(date: Date): void {
     this.validUntil = date;
   }
-  setIsExpired(expired: boolean) {
+  setIsExpired(expired: boolean): void {
     this.isExpired = expired;
   }
 
   // Produtos
-  addProduct(productId: string) {
-    if (!this.productIds.includes(productId)) this.productIds.push(productId);
+  addProduct(product: Product): void {
+    if (!this.products.includes(product)) this.products.push(product);
   }
 
-  removeProduct(productId: string) {
-    this.productIds = this.productIds.filter((id) => id !== productId);
+  removeProduct(product: Product): void {
+    this.products = this.products.filter((id) => id !== product);
   }
 }

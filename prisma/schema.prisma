@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../dist/prisma"
 }
 
 datasource db {
@@ -16,11 +16,13 @@ datasource db {
 
 model Product {
   id String @id @default(uuid())
-  name String @unique 
-  price Int 
+  name String @unique
+  price Int
   isVisible Boolean @default(true) @map("is_visible")
-  categoryId String
+  categoryId String @map("category_id")
   category Category @relation(fields: [categoryId], references: [id])
+  
+  productPromotions ProductPromotion[]
 
   @@map("products")
 }
@@ -28,14 +30,32 @@ model Product {
 model Promotion {
   id String @id @default(uuid())
   description String
-  validDays String[]  @map("valid_days")
+  promotionPrice Int? @map("promotion_price")
+  promotionPercentage Int? @map("promotion_percentage")
+  validDays String[] @map("valid_days")
   validHourStart Int[] @map("valid_hours_start")
   validHourEnd Int[] @map("valid_hours_end")
   validUntil DateTime? @map("valid_until")
   isExpired Boolean @default(false) @map("is_expired")
+  
+  productPromotions ProductPromotion[]
 
   @@map("promotions")
 }
+
+model ProductPromotion {
+  id String @id @default(uuid())
+  productId String @map("product_id")
+  promotionId String @map("promotion_id")
+  isActive Boolean @default(true)
+
+  product Product @relation(fields: [productId], references: [id])
+  promotion Promotion @relation(fields: [promotionId], references: [id])
+
+  @@unique([productId, promotionId])
+  @@map("product_promotions")
+}
+
 
 model Category {
   id String @id @default(uuid())

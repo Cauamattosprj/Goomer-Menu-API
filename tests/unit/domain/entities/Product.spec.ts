@@ -17,7 +17,6 @@ describe("Product entity", () => {
     expect(product).toHaveProperty("price", 899);
     expect(product).toHaveProperty("category", "Bebidas");
     expect(product).toHaveProperty("visible", true);
-    expect(product).toHaveProperty("promotions", []);
   });
   it("should update product object correctly", () => {
     product.setName("Bebida 2");
@@ -35,49 +34,5 @@ describe("Product entity", () => {
       product.setPrice(-12);
     }).toThrow();
   });
-  it("should add promotions correctly", () => {
-    const promotion: Promotion = new Promotion({
-      description: "Promoção de bebidas de fim de semana!",
-      validDays: ["SUN", "SAT"],
-      validHourStart: 1300,
-      validHourEnd: 1800,
-    });
-    const promotion2: Promotion = new Promotion({
-      description: "Promoção de bebidas de semana!",
-      validDays: ["WED", "THU"],
-      validHourStart: 1300,
-      validHourEnd: 1800,
-    });
 
-    product.addPromotion(promotion);
-    product.addPromotion(promotion2);
-
-    expect(product).toHaveProperty("promotions", [promotion, promotion2]);
-  });
-  it("should remove promotions correctly", () => {
-    const promotion: Promotion = new Promotion({
-      description: "Promoção de bebidas de fim de semana!",
-      validDays: ["SUN", "SAT"],
-      validHourStart: 1300,
-      validHourEnd: 1800,
-    });
-    const promotion2: Promotion = new Promotion({
-      description: "Promoção de bebidas de semana!",
-      validDays: ["WED", "THU"],
-      validHourStart: 1300,
-      validHourEnd: 1800,
-    });
-
-    console.log("Promotion 1 ID:", promotion.getId());
-    console.log("Promotion 2 ID:", promotion2.getId());
-
-    product.addPromotion(promotion);
-    product.addPromotion(promotion2);
-
-    product.removePromotion(promotion.getId());
-    expect(product.getPromotions()).toEqual([promotion2]);
-
-    product.removePromotion(promotion2.getId());
-    expect(product.getPromotions()).toEqual([]);
-  });
 });

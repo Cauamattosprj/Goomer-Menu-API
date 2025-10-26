@@ -7,17 +7,18 @@ import { Product } from "../../domain/entities/Product";
 import { ProductDTO } from "../../domain/dto/ProductDTO";
 import { ApiResponseDTO } from "../../domain/dto/ApiResponseDTO";
 import { success } from "zod";
+import { ProductService } from "@/src/domain/services/ProductService";
 
 const productRepository: ProductRepositoryPort =
   new PostgresProductRepository();
-const createProductUseCase = new CreateProductUseCase(productRepository);
+const createProductUseCase: CreateProductUseCase = new CreateProductUseCase(productRepository, new ProductService(productRepository));
 
-export const productRouter = Router();
+export const productRouter: Router = Router();
 
 productRouter.post("/products", async (req: Request, res: Response) => {
   try {
     const productDTO: ProductDTO = req.body;
-    const response = await createProductUseCase.execute(productDTO);
+    const response: ProductDTO  = await createProductUseCase.execute(productDTO);
     res.status(201).json(ApiResponseDTO.ofSuccess(response));
   } catch (err: any) {
     res.status(400).json({ error: err.message });

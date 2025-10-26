@@ -17,16 +17,7 @@ export class PostgresProductRepository implements ProductRepositoryPort {
       data: {
         name: product.name,
         price: product.price,
-        category: {
-          connectOrCreate: {
-            create: {
-              category: "Entradas"
-            },
-            where: {
-              id: product.id
-            }
-          }
-        }
+        categoryId: "321312213312"
       }
     })
   }

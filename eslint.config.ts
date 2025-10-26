@@ -30,18 +30,6 @@ const config = defineConfig([
       ],
 
       "@typescript-eslint/no-inferrable-types": "off",
-      "@typescript-eslint/typedef": [
-        "error",
-        {
-          arrayDestructuring: true,
-          arrowParameter: true,
-          memberVariableDeclaration: true,
-          objectDestructuring: true,
-          parameter: true,
-          propertyDeclaration: true,
-          variableDeclaration: true,
-        },
-      ],
       "@typescript-eslint/no-unsafe-assignment": "error",
       "@typescript-eslint/no-unsafe-call": "error",
       "@typescript-eslint/no-unsafe-member-access": "error",

@@ -23,7 +23,7 @@ export class Promotion {
     validHourEnd: number;
     validUntil?: Date;
     isExpired?: boolean;
-    products?: Product[]
+    products?: Product[];
   }) {
     this.id = params.id || uuidv4();
     this.description = params.description;
@@ -34,7 +34,7 @@ export class Promotion {
     this.validHourEnd = params.validHourEnd;
     this.validUntil = params.validUntil;
     this.isExpired = params.isExpired ?? false;
-    this.products = params.products ?? []
+    this.products = params.products ?? [];
   }
 
   // Getters
@@ -69,6 +69,16 @@ export class Promotion {
     return this.products;
   }
 
+  // Método para verificar se um produto específico está na promoção
+  // Na classe Promotion
+  hasProduct(product: Product): boolean {
+    return this.products.some((p) => p.getId() === product.getId());
+  }
+
+  hasProductById(productId: string): boolean {
+    return this.products.some((product) => product.getId() === productId);
+  }
+
   // Setters
   setDescription(desc: string): void {
     this.description = desc;
@@ -99,10 +109,16 @@ export class Promotion {
 
   // Produtos
   addProduct(product: Product): void {
-    if (!this.products.includes(product)) this.products.push(product);
+    if (!this.products.includes(product)) {
+      this.products.push(product);
+    }
   }
 
   removeProduct(product: Product): void {
-    this.products = this.products.filter((id) => id !== product);
+    this.products = this.products.filter((p) => p !== product);
+  }
+
+  removeProductById(productId: string): void {
+    this.products = this.products.filter((p) => p.getId() !== productId);
   }
 }

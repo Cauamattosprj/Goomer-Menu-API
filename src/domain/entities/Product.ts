@@ -1,4 +1,3 @@
-import { Promotion } from "./Promotion";
 import { v4 as uuidv4 } from "uuid";
 
 export class Product {
@@ -7,8 +6,6 @@ export class Product {
   private price: number;
   private category: string;
   private visible: boolean = true;
-  private promotions: Promotion[] = [];
-
 
   constructor(params: {
     id?: string;
@@ -16,7 +13,6 @@ export class Product {
     price: number;
     category: string;
     visible?: boolean;
-    promotions?: Promotion[];
   }) {
     this.id = params.id;
     this.id ??= uuidv4();
@@ -24,7 +20,6 @@ export class Product {
     this.price = params.price;
     this.category = params.category;
     this.visible = params.visible ?? true;
-    this.promotions = params.promotions ?? [];
   }
 
   // Getters
@@ -43,9 +38,6 @@ export class Product {
   isVisible(): boolean {
     return this.visible;
   }
-  getPromotions(): Array<Promotion> {
-    return this.promotions;
-  }
 
   // Setters
   setName(name: string): void {
@@ -60,14 +52,5 @@ export class Product {
   }
   setVisible(visible: boolean): void {
     this.visible = visible;
-  }
-
-  // Promoções
-  addPromotion(promotion: Promotion): void {
-    this.promotions.push(promotion);
-  }
-
-  removePromotion(promotionId: string): void {
-    this.promotions = this.promotions.filter((promotion) => promotion.getId() !== promotionId);
   }
 }

@@ -21,3 +21,22 @@ Com isso em mente, abaixo descrevo as decisões arquiteturais tomadas para supri
 - **Ferramenta auxiliar de desenvolvimento:** ESLint
 - **Logging:** Pino
 
+## TODOS
+### Products
+- [ ] Delete use case
+- [ ] Update use case 
+
+### Category
+- [ ] Delete use case
+- [ ] Update use case 
+- [ ] Create use case 
+- [ ] Get use case 
+
+### Promotion
+- [ ] Delete use case
+- [ ] Update use case 
+- [ ] Create use case 
+- [ ] Get use case 
+
+### Exceptions
+- [ ] Create and implement custom exceptions on all returns

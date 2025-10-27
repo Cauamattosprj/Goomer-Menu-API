@@ -13,20 +13,11 @@ Com isso em mente, abaixo descrevo as decisões arquiteturais tomadas para supri
 - **Linguagem e ambiente:** NodeJS, JavaScript e TypeScript
 - **Framework:** Express
 - **Ferramenta de testes:** Jest
-- **Escopo de testes:** Unitário, Integração e E2E
+- **Escopo de testes:** Unitários
 - **Banco de dados:** PostgreSQL
 - **ORM:** PrismaORM (somente migrations)
-- **Autenticação:** State-less (JWT)
 - **Containerização:** Docker com Docker Compose
 - **Padrão de versionamento:** GitFlow
-- **Ferramenta auxiliar de versionamento:** Lint-Staged
-- **Ferramenta auxiliar de desenvolvimento:** Prettier e ESLint
-- **Documentação da API:** Swagger
-- **Bibliotecas importantes:** Zod, Husky
+- **Ferramenta auxiliar de desenvolvimento:** ESLint
 - **Logging:** Pino
-- Rate Limit
 
-### Padrão arquitetural escolhido
-
-#### Arquitetura Hexagonal
-Visando 

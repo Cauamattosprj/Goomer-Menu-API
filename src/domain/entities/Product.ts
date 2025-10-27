@@ -1,70 +1,56 @@
-import { Promotion } from "./Promotion";
+import { v4 as uuidv4 } from "uuid";
 
 export class Product {
   private id?: string | undefined;
   private name: string;
   private price: number;
-  private category: string;
+  private categoryId?: string | null;
   private visible: boolean = true;
-  private promotions: Promotion[] = [];
 
   constructor(params: {
     id?: string;
     name: string;
     price: number;
-    category: string;
+    categoryId?: string | undefined | null;
     visible?: boolean;
-    promotions?: Promotion[];
   }) {
     this.id = params.id;
+    this.id ??= uuidv4();
     this.name = params.name;
     this.price = params.price;
-    this.category = params.category;
+    this.categoryId = params.categoryId;
     this.visible = params.visible ?? true;
-    this.promotions = params.promotions ?? [];
   }
 
   // Getters
-  getId() {
+  getId(): string | undefined {
     return this.id;
   }
-  getName() {
+  getName(): string {
     return this.name;
   }
-  getPrice() {
+  getPrice(): number {
     return this.price;
   }
-  getCategory() {
-    return this.category;
+  getCategoryId(): string | undefined | null {
+    return this.categoryId;
   }
-  isVisible() {
+  isVisible(): boolean {
     return this.visible;
-  }
-  getPromotions() {
-    return this.promotions;
   }
 
   // Setters
-  setName(name: string) {
+  setName(name: string): void {
     this.name = name;
   }
-  setPrice(price: number) {
+  setPrice(price: number): void {
     if (price < 0) throw new Error("Price cannot be negative");
     this.price = price;
   }
-  setCategory(category: string) {
-    this.category = category;
+  setCategoryId(category: string): void {
+    this.categoryId = category;
   }
-  setVisible(visible: boolean) {
+  setVisible(visible: boolean): void {
     this.visible = visible;
-  }
-
-  // Promoções
-  addPromotion(promotion: Promotion) {
-    this.promotions.push(promotion);
-  }
-
-  removePromotion(promotionId: string) {
-    this.promotions = this.promotions.filter((p) => p.getId() !== promotionId);
   }
 }

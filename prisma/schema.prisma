@@ -15,12 +15,12 @@ datasource db {
 }
 
 model Product {
-  id String @id @default(uuid())
-  name String @unique
-  price Int
-  isVisible Boolean @default(true) @map("is_visible")
-  categoryId String @map("category_id")
-  category Category @relation(fields: [categoryId], references: [id])
+  id          String   @id @default(uuid())
+  name        String   @unique
+  price       Int
+  isVisible   Boolean  @default(true) @map("is_visible")
+  categoryId  String?  @map("category_id") 
+  category    Category? @relation(fields: [categoryId], references: [id])
   
   productPromotions ProductPromotion[]
 
@@ -47,7 +47,7 @@ model ProductPromotion {
   id String @id @default(uuid())
   productId String @map("product_id")
   promotionId String @map("promotion_id")
-  isActive Boolean @default(true)
+  isActive Boolean @default(true) @map("is_active")
 
   product Product @relation(fields: [productId], references: [id])
   promotion Promotion @relation(fields: [promotionId], references: [id])

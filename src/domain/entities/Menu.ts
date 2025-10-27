@@ -70,12 +70,12 @@ export class Menu {
     };
   }
 
-  private getCurrentDay(date: Date): string {
+  getCurrentDay(date: Date): string {
     const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     return days[date.getDay()];
   }
 
-  private getCurrentTime(date: Date): number {
+  getCurrentTime(date: Date): number {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return hours * 100 + minutes;

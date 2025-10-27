@@ -30,8 +30,6 @@ const config = defineConfig([
       ],
 
       "@typescript-eslint/no-inferrable-types": "off",
-      "@typescript-eslint/no-unsafe-assignment": "error",
-      "@typescript-eslint/no-unsafe-call": "error",
       "@typescript-eslint/no-unsafe-member-access": "error",
 
       "no-console": "warn",

@@ -8,7 +8,6 @@ describe("Product entity", () => {
     product = new Product({
       name: "Cerveja",
       price: 899,
-      category: "Bebidas",
     });
   });
 
@@ -22,12 +21,10 @@ describe("Product entity", () => {
     product.setName("Bebida 2");
     product.setPrice(799);
     product.setVisible(false);
-    product.setCategory("Drinks");
 
     expect(product).toHaveProperty("name", "Bebida 2");
     expect(product).toHaveProperty("price", 799);
     expect(product).toHaveProperty("visible", false);
-    expect(product).toHaveProperty("category", "Drinks");
   });
   it("should not allow setting a negative price", () => {
     expect(() => {

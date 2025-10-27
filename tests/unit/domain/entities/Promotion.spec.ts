@@ -15,8 +15,8 @@ describe("Promotion entity", () => {
       validHourEnd: 1800,
     });
 
-    product1 = new Product({name: "Produto 1", category: "Drinks", price: 1300})
-    product2 = new Product({name: "Produto 2", category: "Prato principal", price: 2900})
+    product1 = new Product({ name: "Produto 1", price: 1300 });
+    product2 = new Product({ name: "Produto 2", price: 2900 });
   });
 
   it("should create a promotion object with valid data", () => {
@@ -72,11 +72,10 @@ describe("Promotion entity", () => {
   });
 
   it("should add and remove products correctly", () => {
-
     promotion.addProduct(product1);
     promotion.addProduct(product2);
 
-    console.log("PRODUTOS EM PROMOÇÃO:", promotion.getProducts())
+    console.log("PRODUTOS EM PROMOÇÃO:", promotion.getProducts());
 
     expect(promotion.getProducts()).toEqual([product1, product2]);
     expect(promotion.getProducts()).toHaveLength(2);
@@ -119,7 +118,7 @@ describe("Promotion entity", () => {
 
     expect(expiringPromotion.getValidUntil()).toEqual(expirationDate);
     expect(expiringPromotion.getIsExpired()).toBe(false);
-  })
+  });
 
   it("should create promotion as expired", () => {
     const expiredPromotion = new Promotion({

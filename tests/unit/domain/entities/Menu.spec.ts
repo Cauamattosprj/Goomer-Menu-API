@@ -1,310 +1,284 @@
 import { Menu } from "@/domain/entities/Menu";
 import { Product } from "@/domain/entities/Product";
 import { Promotion } from "@/domain/entities/Promotion";
-import { PromotionProductService } from "@/domain/services/PromotionProductService";
 
-describe("Menu entity", () => {
+describe("Menu Entity", () => {
   let menu: Menu;
   let products: Product[];
   let promotions: Promotion[];
 
   beforeEach(() => {
     menu = new Menu({
-      name: "Cardápio Principal",
-      description: "Cardápio completo do restaurante",
+      name: "Menu Principal",
     });
 
     products = [
       new Product({
-        name: "Cerveja Artesanal",
-        price: 2500, 
-        category: "Bebidas",
+        id: "prod-1",
+        name: "Hambúrguer",
+        price: 2500,
+        categoryId: "cat-1",
         visible: true,
       }),
       new Product({
-        name: "Porção de Batata Frita",
-        price: 1800,
-        category: "Entradas",
+        id: "prod-2",
+        name: "Refrigerante",
+        price: 800,
+        categoryId: "cat-2",
         visible: true,
       }),
       new Product({
-        name: "Filé Mignon",
-        price: 4500,
-        category: "Pratos principais",
-        visible: true,
-      }),
-      new Product({
-        name: "Tiramisu",
-        price: 2200, // R$ 22,00
-        category: "Sobremesas",
-        visible: true,
-      }),
-      new Product({
-        name: "Produto Invisível",
-        price: 1500,
-        category: "Entradas",
+        id: "prod-3",
+        name: "Sobremesa",
+        price: 1200,
+        categoryId: "cat-1",
         visible: false, 
       }),
     ];
 
     promotions = [
       new Promotion({
-        description: "Happy Hour - Cerveja 50% off",
-        discountPercentage: 0.5,  
-        validDays: ["MON", "TUE", "WED", "THU", "FRI"],
-        validHourStart: 1700, // 17:00
-        validHourEnd: 1900, 
-        isExpired: false,
+        id: "promo-1",
+        description: "Promoção de Hambúrguer",
+        discountPrice: 2000,
+        validDays: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        validHourStart: 0,
+        validHourEnd: 2359,
+        products: [products[0]], 
       }),
       new Promotion({
-        description: "Promoção de Segunda",
-        discountPrice: 1500,
-        validDays: ["MON"],
-        validHourStart: 1200, 
-        validHourEnd: 1500, 
-        isExpired: false,
-      }),
-      new Promotion({
-        description: "Promoção Expirada",
-        discountPercentage: 0.3,
-        validDays: ["SUN", "SAT"],
+        id: "promo-2",
+        description: "Promoção de Bebida",
+        discountPercentage: 20,
+        validDays: ["MON", "TUE", "WED"],
         validHourStart: 1400,
         validHourEnd: 1800,
-        isExpired: true, 
+        products: [products[1]], 
       }),
     ];
-
-    PromotionProductService.associatePromotionWithProduct(
-      promotions[0],
-      products[0]
-    );
-    PromotionProductService.associatePromotionWithProduct(
-      promotions[1],
-      products[1]
-    );
   });
 
-  it("should return a valid menu object", () => {
-    expect(menu.getId()).toBeDefined();
-    expect(menu.getName()).toBe("Cardápio Principal");
-    expect(menu.getDescription()).toBe("Cardápio completo do restaurante");
-    expect(menu.getIsActive()).toBe(true);
-    expect(menu.getCreatedAt()).toBeInstanceOf(Date);
-    expect(menu.getUpdatedAt()).toBeInstanceOf(Date);
-  });
-
-  it("should return a valid menu object with categories, products and promotions", () => {
-    const testMenu = new Menu({
-      name: "Cardápio Principal",
-      description: "Cardápio completo do restaurante",
+  describe("Constructor", () => {
+    it("should create a menu with valid data", () => {
+      expect(menu.getId()).toBeDefined();
+      expect(menu.getName()).toBe("Menu Principal");
+      expect(menu.getIsActive()).toBe(true);
     });
 
-    const originalUpdatedAt = testMenu.getUpdatedAt();
+    it("should create a menu with custom id", () => {
+      const customMenu = new Menu({
+        id: "custom-id",
+        name: "Menu Custom",
+      });
 
-    const mockDate = new Date("2024-01-15T18:30:00");
-    const dateSpy = jest
-      .spyOn(global, "Date")
-      .mockImplementation(() => mockDate);
+      expect(customMenu.getId()).toBe("custom-id");
+      expect(customMenu.getName()).toBe("Menu Custom");
+    });
 
-    const consolidatedMenu = testMenu.getConsolidatedMenu(products, promotions);
+    it("should create an inactive menu", () => {
+      const inactiveMenu = new Menu({
+        name: "Menu Inativo",
+        isActive: false,
+      });
 
-    dateSpy.mockRestore();
-
-    expect(consolidatedMenu.menuId).toBeDefined();
-    expect(consolidatedMenu.menuName).toBe("Cardápio Principal");
-    expect(consolidatedMenu.categories).toHaveProperty("Bebidas");
-    expect(consolidatedMenu.categories).toHaveProperty("Entradas");
-    expect(consolidatedMenu.categories).toHaveProperty("Pratos principais");
-    expect(consolidatedMenu.categories).toHaveProperty("Sobremesas");
-
-    expect(consolidatedMenu.lastUpdated).toBe(originalUpdatedAt);
-
-    expect(consolidatedMenu.categories["Bebidas"]).toHaveLength(1);
-    expect(consolidatedMenu.categories["Entradas"]).toHaveLength(1);
-    expect(consolidatedMenu.categories["Pratos principais"]).toHaveLength(1);
-    expect(consolidatedMenu.categories["Sobremesas"]).toHaveLength(1);
+      expect(inactiveMenu.getIsActive()).toBe(false);
+    });
   });
 
-  it("should return a menu without products with visible set to false", () => {
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
+  describe("getMenuWithProductsAndPromotions", () => {
+    it("should return menu with products and promotions", () => {
+      const result = menu.getMenuWithProductsAndPromotions(products, promotions);
 
-    const allProducts = Object.values(consolidatedMenu.categories).flat();
-    const invisibleProduct = allProducts.find(
-      (item) => item.product.getName() === "Produto Invisível"
-    );
+      expect(result.menuId).toBe(menu.getId());
+      expect(result.menuName).toBe("Menu Principal");
+      expect(result.items).toHaveLength(2);
+    });
 
-    expect(invisibleProduct).toBeUndefined();
+    it("should exclude invisible products", () => {
+      const result = menu.getMenuWithProductsAndPromotions(products, promotions);
 
-    expect(consolidatedMenu.categories["Entradas"]).toHaveLength(1);
-    expect(consolidatedMenu.categories["Entradas"][0].product.getName()).toBe(
-      "Porção de Batata Frita"
-    );
-  });
+      const visibleProducts = result.items.map(item => item.product.getName());
+      expect(visibleProducts).toContain("Hambúrguer");
+      expect(visibleProducts).toContain("Refrigerante");
+      expect(visibleProducts).not.toContain("Sobremesa");
+    });
 
-  it("should apply promotions only during valid days and hours", () => {
-    const mondayEvening = new Date("2024-01-15T18:30:00");
-    let consolidatedMenu = menu.getConsolidatedMenu(
-      products,
-      promotions,
-      mondayEvening
-    );
-    let beerItem = consolidatedMenu.categories["Bebidas"][0];
+    it("should apply discount price correctly", () => {
+      const result = menu.getMenuWithProductsAndPromotions(products, promotions);
+      
+      const hamburgerItem = result.items.find(item => item.product.getName() === "Hambúrguer");
+      expect(hamburgerItem?.finalPrice).toBe(2000);
+      expect(hamburgerItem?.activePromotion?.getId()).toBe("promo-1");
+    });
 
-    expect(beerItem.activePromotion).toBeDefined();
-    expect(beerItem.activePromotion?.getDescription()).toBe(
-      "Happy Hour - Cerveja 50% off"
-    );
-    expect(beerItem.finalPrice).toBe(1250);
-
-    const mondayNight = new Date("2024-01-15T20:00:00");
-    consolidatedMenu = menu.getConsolidatedMenu(
-      products,
-      promotions,
-      mondayNight
-    );
-    beerItem = consolidatedMenu.categories["Bebidas"][0];
-
-    expect(beerItem.activePromotion).toBeNull();
-    expect(beerItem.finalPrice).toBe(2500);
-  });
-
-  it("should not apply expired promotions", () => {
-    const sundayAfternoon = new Date("2024-01-14T16:00:00"); 
-    jest.spyOn(global, "Date").mockImplementation(() => sundayAfternoon);
-
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
-
-    const allItems = Object.values(consolidatedMenu.categories).flat();
-    const itemsWithExpiredPromo = allItems.filter(
-      (item) => item.activePromotion?.getDescription() === "Promoção Expirada"
-    );
-
-    expect(itemsWithExpiredPromo).toHaveLength(0);
-
-    jest.restoreAllMocks();
-  });
-
-  it("should calculate final price correctly for discount percentage", () => {
-    const mondayEvening = new Date("2024-01-15T18:30:00");
-    jest.spyOn(global, "Date").mockImplementation(() => mondayEvening);
-
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
-    const beerItem = consolidatedMenu.categories["Bebidas"][0];
-
-    expect(beerItem.finalPrice).toBe(1250);
-
-    jest.restoreAllMocks();
-  });
-
-  it("should calculate final price correctly for fixed discount price", () => {
-    const mondayLunch = new Date("2024-01-15T13:00:00"); 
-    jest.spyOn(global, "Date").mockImplementation(() => mondayLunch);
-
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
-    const friesItem = consolidatedMenu.categories["Entradas"][0];
-
-    expect(friesItem.finalPrice).toBe(1500);
-
-    jest.restoreAllMocks();
-  });
-
-  it("should return original price when no active promotion exists", () => {
-    const fridayNight = new Date("2024-01-19T21:00:00");
-    jest.spyOn(global, "Date").mockImplementation(() => fridayNight);
-
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
-    const steakItem = consolidatedMenu.categories["Pratos principais"][0];
-    const dessertItem = consolidatedMenu.categories["Sobremesas"][0];
-
-    expect(steakItem.activePromotion).toBeNull();
-    expect(steakItem.finalPrice).toBe(4500); 
-    expect(dessertItem.activePromotion).toBeNull();
-    expect(dessertItem.finalPrice).toBe(2200); 
-
-    jest.restoreAllMocks();
-  });
-
-  it("should handle empty products and promotions arrays", () => {
-    const emptyProducts: Product[] = [];
-
-    const consolidatedMenu = menu.getConsolidatedMenu(
-      emptyProducts,
-      promotions
-    );
-
-    expect(consolidatedMenu.categories).toEqual({});
-    expect(consolidatedMenu.menuId).toBeDefined();
-    expect(consolidatedMenu.menuName).toBe("Cardápio Principal");
-  });
-
-  it("should update menu properties correctly", () => {
-    const originalUpdatedAt = menu.getUpdatedAt();
-
-    setTimeout(() => {
-      menu.setName("Novo Cardápio");
-      menu.setDescription("Descrição atualizada");
-      menu.setIsActive(false);
-
-      expect(menu.getName()).toBe("Novo Cardápio");
-      expect(menu.getDescription()).toBe("Descrição atualizada");
-      expect(menu.getIsActive()).toBe(false);
-      expect(menu.getUpdatedAt().getTime()).toBeGreaterThan(
-        originalUpdatedAt.getTime()
+    it("should apply discount percentage correctly", () => {
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[1]],
+        [promotions[1]],
       );
-    }, 10);
-  });
 
-  it("should group products by category correctly", () => {
-    const consolidatedMenu = menu.getConsolidatedMenu(products, promotions);
-
-    expect(Object.keys(consolidatedMenu.categories)).toEqual([
-      "Bebidas",
-      "Entradas",
-      "Pratos principais",
-      "Sobremesas",
-    ]);
-
-    expect(consolidatedMenu.categories["Bebidas"][0].product.getName()).toBe(
-      "Cerveja Artesanal"
-    );
-    expect(consolidatedMenu.categories["Entradas"][0].product.getName()).toBe(
-      "Porção de Batata Frita"
-    );
-    expect(
-      consolidatedMenu.categories["Pratos principais"][0].product.getName()
-    ).toBe("Filé Mignon");
-    expect(consolidatedMenu.categories["Sobremesas"][0].product.getName()).toBe(
-      "Tiramisu"
-    );
-  });
-
-  it("should handle products without category", () => {
-    const productWithoutCategory = new Product({
-      name: "Produto Sem Categoria",
-      price: 1000,
-      category: "",
-      visible: true,
+      const drinkItem = result.items[0];
+      expect(drinkItem.finalPrice).toBe(640); 
+      expect(drinkItem.activePromotion?.getId()).toBe("promo-2");
     });
 
-    const productWithoutCategory2 = new Product({
-      name: "Produto Sem Categoria",
-      price: 1000,
-      category: "",
-      visible: true,
+    it("should not apply expired promotions", () => {
+      const expiredPromotion = new Promotion({
+        id: "expired-promo",
+        description: "Promoção Expirada",
+        discountPrice: 1000,
+        validDays: ["MON", "TUE", "WED"],
+        validHourStart: 0,
+        validHourEnd: 2359,
+        isExpired: true,
+        products: [products[0]],
+      });
+
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[0]],
+        [expiredPromotion]
+      );
+
+      const item = result.items[0];
+      expect(item.activePromotion).toBeNull();
+      expect(item.finalPrice).toBe(2500); 
+
+    it("should not apply promotions outside valid hours", () => {
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[1]], 
+        [promotions[1]], 
+      );
+
+      const item = result.items[0];
+      expect(item.activePromotion).toBeNull();
+      expect(item.finalPrice).toBe(800);
     });
 
-    const consolidatedMenu = menu.getConsolidatedMenu(
-      [productWithoutCategory, productWithoutCategory2],
-      promotions
-    );
+    it("should not apply promotions outside valid days", () => {
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[1]], 
+        [promotions[1]], 
+      );
 
-    expect(consolidatedMenu.categories).toEqual({});
+      const item = result.items[0];
+      expect(item.activePromotion).toBeNull();
+      expect(item.finalPrice).toBe(800); 
+    });
+
+    it("should handle products without promotions", () => {
+      const productWithoutPromotion = new Product({
+        id: "prod-no-promo",
+        name: "Produto Sem Promoção",
+        price: 1500,
+        visible: true,
+      });
+
+      const result = menu.getMenuWithProductsAndPromotions(
+        [productWithoutPromotion],
+        [] 
+      );
+
+      const item = result.items[0];
+      expect(item.activePromotion).toBeNull();
+      expect(item.finalPrice).toBe(1500);
+    });
+
+    it("should return original price when promotion has no discount", () => {
+      const invalidPromotion = new Promotion({
+        description: "Promoção Inválida",
+        validDays: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        validHourStart: 0,
+        validHourEnd: 2359,
+        products: [products[0]],
+      });
+
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[0]],
+        [invalidPromotion]
+      );
+
+      const item = result.items[0];
+      expect(item.activePromotion).toBeDefined();
+      expect(item.finalPrice).toBe(2500); 
+    });
   });
 
-  it("DEBUG: should verify promotion associations", () => {
-    expect(promotions[0].getProducts()).toHaveLength(1);
-    expect(promotions[1].getProducts()).toHaveLength(1);
-    expect(promotions[0].hasProduct(products[0])).toBe(true);
-    expect(promotions[1].hasProduct(products[1])).toBe(true);
+  describe("Promotion Priority", () => {
+    it("should use the first valid promotion when multiple apply", () => {
+      const extraPromotion = new Promotion({
+        id: "promo-extra",
+        description: "Promoção Extra",
+        discountPrice: 1800,
+        validDays: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        validHourStart: 0,
+        validHourEnd: 2359,
+        products: [products[0]],
+      });
+
+      const result = menu.getMenuWithProductsAndPromotions(
+        [products[0]],
+        [promotions[0], extraPromotion] 
+      );
+
+      const item = result.items[0];
+      expect(item.activePromotion?.getId()).toBe("promo-1");
+      expect(item.finalPrice).toBe(2000);
+    });
+  });
+
+  describe("Edge Cases", () => {
+    it("should handle empty products array", () => {
+      const result = menu.getMenuWithProductsAndPromotions([], promotions);
+
+      expect(result.items).toHaveLength(0);
+    });
+
+    it("should handle empty promotions array", () => {
+      const result = menu.getMenuWithProductsAndPromotions(products, []);
+
+      expect(result.items).toHaveLength(2);
+      result.items.forEach(item => {
+        expect(item.activePromotion).toBeNull();
+        expect(item.finalPrice).toBe(item.product.getPrice());
+      });
+    });
+
+    it("should round final price correctly with percentage discount", () => {
+      const product = new Product({
+        name: "Produto Teste",
+        price: 1999, 
+      });
+
+      const promotion = new Promotion({
+        description: "33% Off",
+        discountPercentage: 33,
+        validDays: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        validHourStart: 0,
+        validHourEnd: 2359,
+        products: [product],
+      });
+
+      const result = menu.getMenuWithProductsAndPromotions([product], [promotion]);
+      
+      expect(result.items[0].finalPrice).toBe(1339);
+    });
+  });
+
+  describe("Time Calculation", () => {
+    it("should calculate current day correctly", () => {
+      const testDate = new Date("2025-10-26T12:00:00Z+03:00"); 
+      const menuInstance = new Menu({ name: "Test" });
+      
+      const currentDay = menuInstance.getCurrentDay(testDate);
+      expect(currentDay).toBe("SUN");
+    });
+
+    it("should calculate current time correctly", () => {
+      const testDate = new Date("2025-10-26T14:30:00Z+03:00"); 
+      const menuInstance = new Menu({ name: "Test" });
+      
+      const currentTime = menuInstance.getCurrentTime(testDate);
+      expect(currentTime).toBe(1430); 
+    });
   });
 });

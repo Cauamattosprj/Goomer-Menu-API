@@ -44,7 +44,6 @@ model Promotion {
 }
 
 model ProductPromotion {
-  id String @id @default(uuid())
   productId String @map("product_id")
   promotionId String @map("promotion_id")
   isActive Boolean @default(true) @map("is_active")
@@ -52,10 +51,9 @@ model ProductPromotion {
   product Product @relation(fields: [productId], references: [id])
   promotion Promotion @relation(fields: [promotionId], references: [id])
 
-  @@unique([productId, promotionId])
+  @@id([productId, promotionId])
   @@map("product_promotions")
 }
-
 
 model Category {
   id String @id @default(uuid())

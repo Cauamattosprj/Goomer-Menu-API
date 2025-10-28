@@ -1,25 +1,23 @@
+import { v4 as uuidv4 } from "uuid";
+
 export class Category {
   private id: string;
   private name: string;
-  
-  constructor(params: { id: string; name: string }) {
-    this.id = params.id;
+
+  constructor(params: { id?: string; name: string }) {
+    this.id = params.id || uuidv4();
     this.name = params.name;
   }
 
-  public getId(): string {
+  getId(): string {
     return this.id;
   }
 
-  public getName(): string {
+  getName(): string {
     return this.name;
   }
 
-  public setId(id: string): void {
-    this.id = id;
-  }
-
-  public setName(name: string): void {
+  setName(name: string): void {
     this.name = name;
   }
 }

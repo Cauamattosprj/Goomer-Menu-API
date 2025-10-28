@@ -1,8 +1,10 @@
 import { Category } from "@/domain/entities/Category";
 
 export interface CategoryRepositoryPort {
-  findByName(name: string): Promise<Category | null>;
-  create(name: string): Promise<Category>;
-  findOrCreate(name: string): Promise<Category>;
   findById(id: string): Promise<Category | null>;
+  findByName(name: string): Promise<Category | null>;
+  findAll(): Promise<Category[]>;
+  save(category: Category): Promise<void>;
+  delete(id: string): Promise<void>;
+  update(category: Category): Promise<void>;
 }

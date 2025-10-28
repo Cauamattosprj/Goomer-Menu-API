@@ -1,6 +1,5 @@
 import { Pool, type PoolConfig } from "pg";
 
-// Interface type-safe para configuração
 interface DatabaseConfig extends PoolConfig {
   host?: string;
   port?: number;

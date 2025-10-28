@@ -1,11 +1,22 @@
-// domain/entities/Menu.ts
+import { PostgresCategoryRepository } from "@/adapters/repository/PostgresCategoryRepository";
+import { ProductDTO } from "../dto/ProductDTO";
 import { Product } from "./Product";
 import { Promotion } from "./Promotion";
 import { v4 as uuidv4 } from "uuid";
+import { DatabaseConnection } from "@/infra/database/DatabaseConnection";
 
 interface MenuItem {
-  product: Product;
-  activePromotion: Promotion | null;
+  product: {
+    id?: string;
+    name: string;
+    price: number;
+    category?: {
+      id: string;
+      name: string;
+    } | null;
+    visible: boolean;
+  };
+  activePromotion: any;
   finalPrice: number;
 }
 
@@ -35,15 +46,16 @@ export class Menu {
 
   getMenuWithProductsAndPromotions(
     products: Product[],
-    promotions: Promotion[]
-  ): SimpleMenu {
+    promotions: Promotion[],
+    categories: Map<string, string>
+  ): MenuDTO {
     const now = new Date();
     const currentDay = this.getCurrentDay(now);
     const currentTime = this.getCurrentTime(now);
 
     const visibleProducts = products.filter((product) => product.isVisible());
 
-    const menuItems: MenuItem[] = visibleProducts.map((product) => {
+    const menuItems: MenuItemDTO[] = visibleProducts.map((product) => {
       const activePromotion =
         promotions.find(
           (promotion) =>
@@ -56,11 +68,36 @@ export class Menu {
         ? this.calculateFinalPrice(product.getPrice(), activePromotion)
         : product.getPrice();
 
-      return {
-        product,
-        activePromotion,
+      const categoryId = product.getCategoryId();
+      const categoryName = categoryId ? categories.get(categoryId) : null;
+
+      const menuItem: MenuItemDTO = {
+        id: product.getId()!,
+        name: product.getName(),
+        price: product.getPrice(),
         finalPrice,
+        ...(categoryId &&
+          categoryName && {
+            category: {
+              id: categoryId,
+              name: categoryName,
+            },
+          }),
+        ...(activePromotion && {
+          promotion: {
+            id: activePromotion.getId(),
+            description: activePromotion.getDescription(),
+            ...(activePromotion.getDiscountPercentage() && {
+              discountPercentage: activePromotion.getDiscountPercentage(),
+            }),
+            ...(activePromotion.getDiscountPrice() && {
+              discountPrice: activePromotion.getDiscountPrice(),
+            }),
+          },
+        }),
       };
+
+      return menuItem;
     });
 
     return {
@@ -87,14 +124,13 @@ export class Menu {
     currentTime: number
   ): boolean {
     const validDays = promotion.getValidDays();
-    const startHour = promotion.getValidHourStart();
-    const endHour = promotion.getValidHourEnd();
+    const startHour = promotion.getTimeRange().getStart();
+    const endHour = promotion.getTimeRange().getEnd();
 
-    return (
-      validDays.includes(currentDay) &&
-      currentTime >= startHour &&
-      currentTime <= endHour
-    );
+    const isDayValid = validDays.includes(currentDay);
+    const isTimeValid = currentTime >= startHour && currentTime <= endHour;
+
+    return isDayValid && isTimeValid;
   }
 
   private calculateFinalPrice(

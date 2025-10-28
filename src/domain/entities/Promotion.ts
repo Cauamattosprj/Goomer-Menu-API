@@ -1,15 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 import { Product } from "./Product";
+import { TimeRange } from "../value-objects/TimeRange";
 
 export class Promotion {
   private id: string;
   private description: string;
-  private discountPrice?: number | undefined;
-  private discountPercentage?: number | undefined;
+  private discountPrice?: number;
+  private discountPercentage?: number;
   private validDays: string[];
-  private validHourStart: number;
-  private validHourEnd: number;
-  private validUntil?: Date | undefined;
+  private timeRange: TimeRange;
+  private validUntil?: Date;
   private isExpired: boolean = false;
   private products: Product[] = [];
 
@@ -19,8 +19,7 @@ export class Promotion {
     discountPrice?: number;
     discountPercentage?: number;
     validDays: string[];
-    validHourStart: number;
-    validHourEnd: number;
+    timeRange: TimeRange;
     validUntil?: Date;
     isExpired?: boolean;
     products?: Product[];
@@ -30,84 +29,105 @@ export class Promotion {
     this.discountPrice = params.discountPrice;
     this.discountPercentage = params.discountPercentage;
     this.validDays = params.validDays;
-    this.validHourStart = params.validHourStart;
-    this.validHourEnd = params.validHourEnd;
+    this.timeRange = params.timeRange;
     this.validUntil = params.validUntil;
     this.isExpired = params.isExpired ?? false;
     this.products = params.products ?? [];
+    this.validate();
   }
 
-  // Getters
+  private validate(): void {
+    if (!this.discountPrice && !this.discountPercentage) {
+      throw new Error(
+        "Promotion must have either discountPrice or discountPercentage"
+      );
+    }
+    if (this.discountPrice && this.discountPrice < 0) {
+      throw new Error("Discount price cannot be negative");
+    }
+    if (
+      this.discountPercentage &&
+      (this.discountPercentage < 0 || this.discountPercentage > 100)
+    ) {
+      throw new Error("Discount percentage must be between 0 and 100");
+    }
+  }
+
   getId(): string {
     return this.id;
   }
+
   getDescription(): string {
     return this.description;
   }
+
   getDiscountPrice(): number | undefined {
     return this.discountPrice;
   }
+
   getDiscountPercentage(): number | undefined {
     return this.discountPercentage;
   }
+
   getValidDays(): string[] {
     return this.validDays;
   }
+
+  getTimeRange(): TimeRange {
+    return this.timeRange;
+  }
+
   getValidHourStart(): number {
-    return this.validHourStart;
+    return this.timeRange.getStart();
   }
+
   getValidHourEnd(): number {
-    return this.validHourEnd;
+    return this.timeRange.getEnd();
   }
+
   getValidUntil(): Date | undefined {
     return this.validUntil;
   }
+
   getIsExpired(): boolean {
     return this.isExpired;
   }
+
   getProducts(): Product[] {
     return this.products;
   }
 
-  // Método para verificar se um produto específico está na promoção
-  // Na classe Promotion
   hasProduct(product: Product): boolean {
     return this.products.some((p) => p.getId() === product.getId());
   }
 
-  hasProductById(productId: string): boolean {
-    return this.products.some((product) => product.getId() === productId);
-  }
-
-  // Setters
   setDescription(desc: string): void {
     this.description = desc;
   }
+
   setDiscountPrice(price: number): void {
     if (price < 0) throw new Error("Promotion price cannot be negative");
     this.discountPrice = price;
   }
 
   setDiscountPercentage(percent: number): void {
-    if (percent < 0) throw new Error("Promotion percentage cannot be negative");
+    if (percent < 0 || percent > 100)
+      throw new Error("Promotion percentage must be between 0 and 100");
     this.discountPercentage = percent;
   }
 
   setValidDays(days: string[]): void {
     this.validDays = days;
   }
-  setValidHours(start: number, end: number): void {
-    this.validHourStart = start;
-    this.validHourEnd = end;
-  }
+
   setValidUntil(date: Date): void {
     this.validUntil = date;
   }
+
   setIsExpired(expired: boolean): void {
     this.isExpired = expired;
   }
 
-  // Produtos
   addProduct(product: Product): void {
     if (!this.products.includes(product)) {
       this.products.push(product);
@@ -116,9 +136,5 @@ export class Promotion {
 
   removeProduct(product: Product): void {
     this.products = this.products.filter((p) => p !== product);
-  }
-
-  removeProductById(productId: string): void {
-    this.products = this.products.filter((p) => p.getId() !== productId);
   }
 }

@@ -4,14 +4,14 @@ export class Product {
   private id?: string | undefined;
   private name: string;
   private price: number;
-  private categoryId?: string | null;
+  private categoryId?: string;
   private visible: boolean = true;
 
   constructor(params: {
     id?: string;
     name: string;
     price: number;
-    categoryId?: string | undefined | null;
+    categoryId?: string | undefined;
     visible?: boolean;
   }) {
     this.id = params.id;

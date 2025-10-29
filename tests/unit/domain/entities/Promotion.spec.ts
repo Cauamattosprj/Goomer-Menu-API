@@ -1,5 +1,6 @@
 import { Product } from "@/domain/entities/Product";
 import { Promotion } from "@/domain/entities/Promotion";
+import { TimeRange } from "@/domain/value-objects/TimeRange";
 
 describe("Promotion entity", () => {
   let promotion: Promotion;
@@ -11,8 +12,7 @@ describe("Promotion entity", () => {
       description: "Promoção de Verão",
       discountPrice: 299,
       validDays: ["MON", "TUE", "WED"],
-      validHourStart: 900,
-      validHourEnd: 1800,
+      timeRange: new TimeRange("09:00", "18:00"),
     });
 
     product1 = new Product({ name: "Produto 1", price: 1300 });
@@ -23,8 +23,8 @@ describe("Promotion entity", () => {
     expect(promotion).toHaveProperty("description", "Promoção de Verão");
     expect(promotion).toHaveProperty("discountPrice", 299);
     expect(promotion).toHaveProperty("validDays", ["MON", "TUE", "WED"]);
-    expect(promotion).toHaveProperty("validHourStart", 900);
-    expect(promotion).toHaveProperty("validHourEnd", 1800);
+    expect(promotion).toHaveProperty("validHourStart", "09:00");
+    expect(promotion).toHaveProperty("validHourEnd", "18:00");
     expect(promotion).toHaveProperty("isExpired", false);
     expect(promotion).toHaveProperty("products", []);
     expect(promotion.getId()).toBeDefined();
@@ -45,7 +45,6 @@ describe("Promotion entity", () => {
     promotion.setDiscountPrice(399);
     promotion.setDiscountPercentage(2);
     promotion.setValidDays(["FRI", "SAT"]);
-    promotion.setValidHours(1000, 2000);
     promotion.setValidUntil(new Date("2024-12-31"));
     promotion.setIsExpired(true);
 
@@ -53,8 +52,6 @@ describe("Promotion entity", () => {
     expect(promotion.getDiscountPrice()).toBe(399);
     expect(promotion.getDiscountPercentage()).toBe(2);
     expect(promotion.getValidDays()).toEqual(["FRI", "SAT"]);
-    expect(promotion.getValidHourStart()).toBe(1000);
-    expect(promotion.getValidHourEnd()).toBe(2000);
     expect(promotion.getValidUntil()).toEqual(new Date("2024-12-31"));
     expect(promotion.getIsExpired()).toBe(true);
   });
@@ -96,8 +93,7 @@ describe("Promotion entity", () => {
       description: "Promoção de 20% off",
       discountPercentage: 20,
       validDays: ["THU", "FRI"],
-      validHourStart: 1200,
-      validHourEnd: 2200,
+      timeRange: new TimeRange("12:00", "22:00"),
     });
 
     expect(percentagePromotion.getDiscountPercentage()).toBe(20);
@@ -111,8 +107,7 @@ describe("Promotion entity", () => {
       description: "Promoção com validade",
       discountPrice: 25,
       validDays: ["SAT", "SUN"],
-      validHourStart: 800,
-      validHourEnd: 2300,
+      timeRange: new TimeRange("08:00", "23:00"),
       validUntil: expirationDate,
     });
 
@@ -125,8 +120,7 @@ describe("Promotion entity", () => {
       description: "Promoção Expirada",
       discountPrice: 15,
       validDays: ["MON"],
-      validHourStart: 900,
-      validHourEnd: 1700,
+      timeRange: new TimeRange("09:00", "17:00"),
       isExpired: true,
     });
 
@@ -140,8 +134,7 @@ describe("Promotion entity", () => {
       description: "Promoção Existente",
       discountPrice: 35,
       validDays: ["WED"],
-      validHourStart: 1000,
-      validHourEnd: 1900,
+      timeRange: new TimeRange("10:00", "19:00"),
     });
 
     expect(reconstructedPromotion.getId()).toBe(existingId);

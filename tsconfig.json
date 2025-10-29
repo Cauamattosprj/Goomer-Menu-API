@@ -10,7 +10,9 @@
     "baseUrl": "./", 
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "noEmitOnError": false,
+    "outDir": "./dist",
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "./jest.setup.ts"]
 }

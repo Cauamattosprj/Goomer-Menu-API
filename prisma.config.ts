@@ -9,5 +9,5 @@ export default defineConfig({
   datasource: {
       url: env<Env>('DATABASE_URL'),
   },
-  schema: 'prisma/schema.prisma',
+  schema: './src/prisma/schema.prisma',
 });

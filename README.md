@@ -7,7 +7,7 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
     
 2. Será construída tendo como principal objetivo a **escalabilidade** - fácil manutenção, facilidade de testes, baixo acoplamento e potencial de expansão
 
-Com isso em mente, a decisão da arquitetura hexagonal foi visando trazer o mínimo de acoplamento possível para o código, onde cada entidade, possui cada meio de contato com o "mundo exterior" do código foi feito através de portas (interfaces) implementadas através de adaptadores (uma camada adicional entre o core e o exterior ou uma implementação concreta de uma interface (porta) já definida).
+Com isso em mente, a decisão da arquitetura hexagonal foi visando trazer o mínimo de acoplamento possível para o código, onde cada meio de contato com o "mundo exterior" do código foi feito através de portas (interfaces) implementadas através de adaptadores (uma camada adicional entre o core e o exterior ou uma implementação concreta de uma interface (porta) já definida).
 
 Também foram criados DTOs para padronizar o retorno da API, com DTOs para as próprias entidades.
 

@@ -1,13 +1,11 @@
-import { PostgresCategoryRepository } from "@/adapters/repository/PostgresCategoryRepository";
-import { ProductDTO } from "../dto/ProductDTO";
 import { Product } from "./Product";
 import { Promotion } from "./Promotion";
 import { v4 as uuidv4 } from "uuid";
-import { DatabaseConnection } from "@/infra/database/DatabaseConnection";
+import { MenuDTO } from "../dto/MenuDTO";
 
-interface MenuItem {
+interface MenuItemDTO {
   product: {
-    id?: string;
+    id: string;
     name: string;
     price: number;
     category?: {

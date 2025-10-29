@@ -12,6 +12,7 @@ export class Promotion {
   private validUntil?: Date;
   private isExpired: boolean = false;
   private products: Product[] = [];
+  
 
   constructor(params: {
     id?: string;

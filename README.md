@@ -10,6 +10,7 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
 Com isso em mente, a decisão da arquitetura hexagonal foi visando trazer o mínimo de acoplamento possível para o código, onde cada meio de contato com o "mundo exterior" do código foi feito através de portas (interfaces) implementadas através de adaptadores (uma camada adicional entre o core e o exterior ou uma implementação concreta de uma interface (porta) já definida).
 
 Também foram criados DTOs para padronizar o retorno da API, com DTOs para as próprias entidades.
+Um middleware para realizar o logging das requisições com Pino também foi criado. Assim, cada requisição HTTP gera um log com request e return e informações importantes para debug.
 
 ### Fluxo de dados típico
 1. Requisição HTTP (mundo externo) -> ProductController (Adaptor de entrada. Nesse caso, não possui uma porta (interface) já estabelecida, mas serve o mesmo propósito dos demais adaptadores)

@@ -163,7 +163,7 @@ npm run test
 
 ## 📚 Documentação da API
 ### Importar no Postman
-Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar no Postman e testar as rotas.
+Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar e testar as rotas.
 
 ### Endpoints Principais
 

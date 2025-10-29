@@ -1,19 +1,28 @@
 services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://groomer:groomer@db:5432/groomer_menu_api
+      - NODE_ENV=development
+    depends_on:
+      - db
+    restart: unless-stopped
 
   db:
-    image: postgres
+    image: postgres:15-alpine
     restart: always
-    # set shared memory limit when using docker compose
     shm_size: 128mb
-    # or set shared memory limit when deploy via swarm stack
-    #volumes:
-    #  - type: tmpfs
-    #    target: /dev/shm
-    #    tmpfs:
-    #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       POSTGRES_PASSWORD: groomer
       POSTGRES_USER: groomer
       POSTGRES_DB: groomer_menu_api
     ports:
-      - 5432:5432
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:

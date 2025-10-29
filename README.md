@@ -103,34 +103,24 @@ src/
 - **Linting**: ESLint
     
 
-## 📋 Requisitos Atendidos
-
-### ✅ Obrigatórios
+## 📋 Funcionalidades
 
 - Desenvolvido em TypeScript
     
-- Framework não-opinado (Express)
+- Express
     
-- Banco SQL (PostgreSQL) com consultas em SQL puro
+- Banco Relacional em SQL (PostgreSQL) com consultas em SQL
     
-- ORM apenas para migrations (Prisma)
+- ORM apenas para migrations
     
 - CRUD completo de produtos
     
 - CRUD completo de promoções
     
-- Cardápio consolidado
-    
-- Controle de visibilidade de produtos
-    
+- Cardápio final consolidado
+        
 - Promoções com horários e dias específicos
-    
-
-### 🔄 Opcionais (Em Desenvolvimento)
-
-- Ordenação de produtos no cardápio
-    
-- Tratamento de timezone
+- Teste unitários com Jest
     
 
 ## 🚀 Como Executar
@@ -155,18 +145,6 @@ cd goomer-menu-api
 docker-compose up -d
 ```
 
-### 3. Execute as migrations
-
-bash
-
-npm run db:migrate
-
-### 4. Execute a aplicação
-
-bash
-
-npm run dev
-
 A API estará disponível em `http://localhost:3000`
 
 ## 🧪 Testes
@@ -174,15 +152,11 @@ A API estará disponível em `http://localhost:3000`
 bash
 
 # Testes unitários
-npm test
-
-# Testes com coverage
-npm run test:coverage
-
-# Testes em watch mode
-npm run test:watch
+npm run test
 
 ## 📚 Documentação da API
+
+Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar no Postman e testar as rotas.
 
 ### Endpoints Principais
 
@@ -238,7 +212,7 @@ curl -X POST http://localhost:3000/api/products \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Cerveja Artesanal",
-    "price": 22.50,
+    "price": 2250,
     "category": "Bebidas",
     "visible": true
   }'
@@ -266,31 +240,6 @@ curl -X POST http://localhost:3000/api/promotions \
 bash
 
 curl -X GET http://localhost:3000/api/menu
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-
-env
-
-DATABASE_URL="postgresql://user:password@localhost:5432/goomer_menu"
-PORT=3000
-NODE_ENV=development
-
-### Banco de Dados
-
-As migrations são gerenciadas via Prisma:
-
-bash
-
-# Criar nova migration
-npm run db:migrate:create
-
-# Executar migrations
-npm run db:migrate
-
-# Reset do banco
-npm run db:reset
 
 ## 🚧 Desafios e Problemas Encontrados
 

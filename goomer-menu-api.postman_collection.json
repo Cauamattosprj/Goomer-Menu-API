@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "bdda3e68-15dd-454c-b711-10dff1560716",
+		"name": "goomer-menu-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38184705"
+	},
+	"item": [
+		{
+			"name": "promotion",
+			"item": [
+				{
+					"name": "get promotions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/promotions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"promotions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create promotion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"Happy Hour - 20% off\",\r\n  \"discountPrice\": null,\r\n  \"discountPercentage\": 20,\r\n  \"validDays\": [\"MON\", \"TUE\", \"WED\", \"THU\", \"FRI\"],\r\n  \"timeRange\": {\r\n    \"start\": \"17:00\",\r\n    \"end\": \"19:00\"\r\n  },\r\n  \"validUntil\": \"2024-12-31T23:59:59.000Z\",\r\n  \"isExpired\": false,\r\n  \"products\": [\r\n    {\r\n      \"id\": \"prod-1\"\r\n    },\r\n    {\r\n      \"id\": \"prod-2\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/promotions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"promotions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get promotion by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/promotions/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"promotions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update promotion",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/promotions/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"promotions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete promotion",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/promotions/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"promotions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add product to promotion",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/promotion/:id/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"promotion",
+								":id",
+								"products"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "create products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cerveja\",\r\n    \"price\": 220\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/products/c2520662-91e4-4560-a749-18626f747b0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"c2520662-91e4-4560-a749-18626f747b0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/products/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/products/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "create category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Bebidas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/categories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all categories",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "menu",
+			"item": [
+				{
+					"name": "get restaurant menu",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/menu",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": ""
+		}
+	]
+}

@@ -50,16 +50,14 @@ Também foram criados DTOs para padronizar o retorno da API, com DTOs para as pr
 - **Promoções**: Criação e busca de promoções, adição e remoção de produtos da promoção
     
 - **Cardápio**: Retorno consolidado com produtos visíveis e promoções ativas
+-  **Repositórios especializados**: Cada entidade possui seu repositório com queries em SQL puro
+-  **DTOs de resposta**: Separação entre entidades e dados retornados da API
     
 
-### 🔄 Melhorias possíveis
+### 🔄 Melhorias possíveis (não implementadas)
 
-- Ordenação personalizada de produtos no cardápio
-    
-- Tratamento de timezone para diferentes regiões
-    
-- Testes unitários abrangentes
-    
+- Ordenação personalizada de produtos no cardápio    
+- Tratamento de timezone para diferentes regiões    
 - Documentação Swagger/OpenAPI
 - Testes de integração e E2E
     
@@ -216,19 +214,10 @@ Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_col
 
 1. **Complexidade do SQL puro**: Realizar todas as consultas manualmente em SQL aumentou significativamente a complexidade do desenvolvimento
     
-2. **Arquitetura Hexagonal**: Implementar corretamente o padrão de Portas e Adaptadores em tempo hábil foi desafiador
+2. **Arquitetura Hexagonal**: Implementar corretamente o padrão de Portas e Adaptadores dentro do prazo foi um desafio
     
-3. **Mapeamento objeto-relacional**: Converter resultados de SQL puro para objetos de domínio mantendo a integridade
+3. **Mapeamento de retornos das queries**: Converter resultados de SQL puro para objetos de domínio mantendo a integridade dos dados foi algo que também precisou ser bastante testado
     
-4. **Gestão de transações**: Garantir consistência em operações complexas sem um ORM
-    
+4. **Gestão das operações da API**: Garantir consistência em operações complexas sem ORM foi bastante desafiador também
 
-### Soluções Implementadas
-
-1. **Repositórios especializados**: Cada entidade possui seu repositório com queries otimizadas
     
-2. **Serviços de domínio**: Lógica de negócio centralizada e testável
-    
-3. **DTOs de resposta**: Separação clara entre entidades de domínio e dados de API
-    
-4. **Validações robustas**: Garantia de integridade dos dados em todos os níveis

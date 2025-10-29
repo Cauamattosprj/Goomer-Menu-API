@@ -159,7 +159,7 @@ A API estará disponível em `http://localhost:3000`
 ## 🧪 Testes
 
 # Testes unitários
-npm run test
+Basta executar `npm run test` e ele já irá rodar os testes do Jest com a opção de coverage habilitada.
 
 ## 📚 Documentação da API
 ### Importar no Postman

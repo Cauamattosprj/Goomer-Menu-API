@@ -6,7 +6,17 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
 1. Esta API irá crescer exponencialmente e se tornar o núcleo principal de um grande sistema ao longo dos anos
     
 2. Será construída tendo como principal objetivo a **escalabilidade** - fácil manutenção, facilidade de testes, baixo acoplamento e potencial de expansão
-    
+
+Com isso em mente, a decisão da arquitetura hexagonal foi visando trazer o mínimo de acoplamento possível para o código, onde cada meio de contato com o "mundo exterior" do código foi feito através de portas (interfaces) implementadas através de adaptadores (uma camada adicional entre o core e o exterior ou uma implementação concreta de uma interface (porta) já definida).
+
+Também foram criados DTOs para padronizar o retorno da API, com DTOs para as próprias entidades.
+
+### Fluxo de dados típico
+1. Requisição HTTP (mundo externo) -> ProductController (Adaptor de entrada. Nesse caso, não possui uma porta (interface) já estabelecida, mas serve o mesmo propósito dos demais adaptadores)
+2. Validação -> CreateProductUseCase (Camada de aplicação)
+3. Regras de Negócio -> ProductService (Serviços de domínio)
+4. Persistência -> PostgresProductRepository (Adapter de Saída)
+5. Resposta -> ProductDTO -> ApiResponseDTO -> Retorno HTTP
 
 ## 🏗️ Decisões Arquiteturais
 
@@ -40,24 +50,23 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
 - **Promoções**: Criação e busca de promoções, adição e remoção de produtos da promoção
     
 - **Cardápio**: Retorno consolidado com produtos visíveis e promoções ativas
+-  **Repositórios especializados**: Cada entidade possui seu repositório com queries em SQL puro
+-  **DTOs de resposta**: Separação entre entidades e dados retornados da API
     
 
-### 🔄 Melhorias possíveis
+### 🔄 Melhorias possíveis (não implementadas)
 
-- Ordenação personalizada de produtos no cardápio
-    
-- Tratamento de timezone para diferentes regiões
-    
-- Testes unitários abrangentes
-    
+- Ordenação personalizada de produtos no cardápio    
+- Tratamento de timezone para diferentes regiões    
 - Documentação Swagger/OpenAPI
 - Testes de integração e E2E
-- 
     
 
 ## 📁 Estrutura do Projeto
 
 text
+
+```bash
 
 src/
 ├── adapters/                 # Adaptadores para frameworks externos
@@ -80,6 +89,7 @@ src/
 ├── config/                 # Configurações
 └── shared/                 # Utilitários compartilhados
 
+```
 ## 🛠️ Tecnologias
 
 - **Runtime**: Node.js
@@ -133,11 +143,10 @@ src/
     
 
 ### 1. Clone o repositório
-
-bash
-
-git clone <repository-url>
+```bash
+git clone git@github.com:Cauamattosprj/Goomer-Menu-API.git
 cd goomer-menu-api
+```
 
 ### 2. Execute com Docker
 
@@ -149,14 +158,12 @@ A API estará disponível em `http://localhost:3000`
 
 ## 🧪 Testes
 
-bash
-
 # Testes unitários
-npm run test
+Basta executar `npm run test` e ele já irá rodar os testes do Jest com a opção de coverage habilitada.
 
 ## 📚 Documentação da API
-
-Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar no Postman e testar as rotas.
+### Importar no Postman
+Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar e testar as rotas.
 
 ### Endpoints Principais
 
@@ -200,66 +207,17 @@ Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_col
 #### Cardápio
 
 - `GET /api/menu` - Obter cardápio consolidado
-    
-
-## 🎯 Exemplos de Uso
-
-### Criar um produto
-
-bash
-
-curl -X POST http://localhost:3000/api/products \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Cerveja Artesanal",
-    "price": 2250,
-    "category": "Bebidas",
-    "visible": true
-  }'
-
-### Criar uma promoção
-
-bash
-
-curl -X POST http://localhost:3000/api/promotions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "description": "Happy Hour - 20% off",
-    "discountPercentage": 20,
-    "validDays": ["MON", "TUE", "WED", "THU", "FRI"],
-    "timeRange": {
-      "start": "17:00",
-      "end": "19:00"
-    },
-    "validUntil": "2024-12-31T23:59:59.000Z",
-    "products": ["prod-1", "prod-2"]
-  }'
-
-### Obter cardápio
-
-bash
-
-curl -X GET http://localhost:3000/api/menu
-
+  
 ## 🚧 Desafios e Problemas Encontrados
 
 ### Principais Dificuldades
 
 1. **Complexidade do SQL puro**: Realizar todas as consultas manualmente em SQL aumentou significativamente a complexidade do desenvolvimento
     
-2. **Arquitetura Hexagonal**: Implementar corretamente o padrão de Portas e Adaptadores em tempo hábil foi desafiador
+2. **Arquitetura Hexagonal**: Implementar corretamente o padrão de Portas e Adaptadores dentro do prazo foi um desafio
     
-3. **Mapeamento objeto-relacional**: Converter resultados de SQL puro para objetos de domínio mantendo a integridade
+3. **Mapeamento de retornos das queries**: Converter resultados de SQL puro para objetos de domínio mantendo a integridade dos dados foi algo que também precisou ser bastante testado
     
-4. **Gestão de transações**: Garantir consistência em operações complexas sem um ORM
-    
+4. **Gestão das operações da API**: Garantir consistência em operações complexas sem ORM foi bastante desafiador também
 
-### Soluções Implementadas
-
-1. **Repositórios especializados**: Cada entidade possui seu repositório com queries otimizadas
     
-2. **Serviços de domínio**: Lógica de negócio centralizada e testável
-    
-3. **DTOs de resposta**: Separação clara entre entidades de domínio e dados de API
-    
-4. **Validações robustas**: Garantia de integridade dos dados em todos os níveis

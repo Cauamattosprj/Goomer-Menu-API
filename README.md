@@ -6,7 +6,17 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
 1. Esta API irá crescer exponencialmente e se tornar o núcleo principal de um grande sistema ao longo dos anos
     
 2. Será construída tendo como principal objetivo a **escalabilidade** - fácil manutenção, facilidade de testes, baixo acoplamento e potencial de expansão
-    
+
+Com isso em mente, a decisão da arquitetura hexagonal foi visando trazer o mínimo de acoplamento possível para o código, onde cada entidade, possui cada meio de contato com o "mundo exterior" do código foi feito através de portas (interfaces) implementadas através de adaptadores (uma camada adicional entre o core e o exterior ou uma implementação concreta de uma interface (porta) já definida).
+
+Também foram criados DTOs para padronizar o retorno da API, com DTOs para as próprias entidades.
+
+### Fluxo de dados típico
+1. Requisição HTTP (mundo externo) -> ProductController (Adaptor de entrada. Nesse caso, não possui uma porta (interface) já estabelecida, mas serve o mesmo propósito dos demais adaptadores)
+2. Validação -> CreateProductUseCase (Camada de aplicação)
+3. Regras de Negócio -> ProductService (Serviços de domínio)
+4. Persistência -> PostgresProductRepository (Adapter de Saída)
+5. Resposta -> ProductDTO -> ApiResponseDTO -> Retorno HTTP
 
 ## 🏗️ Decisões Arquiteturais
 
@@ -52,12 +62,13 @@ Decidi conduzir o projeto com o seguinte cenário fictício em mente:
     
 - Documentação Swagger/OpenAPI
 - Testes de integração e E2E
-- 
     
 
 ## 📁 Estrutura do Projeto
 
 text
+
+```bash
 
 src/
 ├── adapters/                 # Adaptadores para frameworks externos
@@ -80,6 +91,7 @@ src/
 ├── config/                 # Configurações
 └── shared/                 # Utilitários compartilhados
 
+```
 ## 🛠️ Tecnologias
 
 - **Runtime**: Node.js
@@ -133,11 +145,10 @@ src/
     
 
 ### 1. Clone o repositório
-
-bash
-
-git clone <repository-url>
+```bash
+git clone git@github.com:Cauamattosprj/Goomer-Menu-API.git
 cd goomer-menu-api
+```
 
 ### 2. Execute com Docker
 
@@ -148,8 +159,6 @@ docker-compose up -d
 A API estará disponível em `http://localhost:3000`
 
 ## 🧪 Testes
-
-bash
 
 # Testes unitários
 npm run test
@@ -200,47 +209,7 @@ Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_col
 #### Cardápio
 
 - `GET /api/menu` - Obter cardápio consolidado
-    
-
-## 🎯 Exemplos de Uso
-
-### Criar um produto
-
-bash
-
-curl -X POST http://localhost:3000/api/products \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Cerveja Artesanal",
-    "price": 2250,
-    "category": "Bebidas",
-    "visible": true
-  }'
-
-### Criar uma promoção
-
-bash
-
-curl -X POST http://localhost:3000/api/promotions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "description": "Happy Hour - 20% off",
-    "discountPercentage": 20,
-    "validDays": ["MON", "TUE", "WED", "THU", "FRI"],
-    "timeRange": {
-      "start": "17:00",
-      "end": "19:00"
-    },
-    "validUntil": "2024-12-31T23:59:59.000Z",
-    "products": ["prod-1", "prod-2"]
-  }'
-
-### Obter cardápio
-
-bash
-
-curl -X GET http://localhost:3000/api/menu
-
+  
 ## 🚧 Desafios e Problemas Encontrados
 
 ### Principais Dificuldades

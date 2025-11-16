@@ -146,8 +146,8 @@ src/
 
 ### 1. Clone o repositório
 ```bash
-git clone git@github.com:Cauamattosprj/Goomer-Menu-API.git
-cd goomer-menu-api
+git clone git@github.com:Cauamattosprj/NodeJS-Restaurant-Menu-API.git
+cd restaurant-menu-api
 ```
 
 ### 2. Execute com Docker
@@ -165,7 +165,7 @@ Basta executar `npm run test` e ele já irá rodar os testes do Jest com a opç�
 
 ## 📚 Documentação da API
 ### Importar no Postman
-Dentro do repositório, você encontrará o arquivo `goomer-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar e testar as rotas.
+Dentro do repositório, você encontrará o arquivo `restaurant-menu-api.postman_collection.json`, onde já haverá uma collection do Postman pronta para você importar e testar as rotas.
 
 ### Endpoints Principais
 

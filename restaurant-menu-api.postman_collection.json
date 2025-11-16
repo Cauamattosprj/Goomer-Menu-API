@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "bdda3e68-15dd-454c-b711-10dff1560716",
-		"name": "goomer-menu-api",
+		"name": "restaurant-menu-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "38184705"
 	},

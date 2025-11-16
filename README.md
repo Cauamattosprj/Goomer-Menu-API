@@ -1,4 +1,5 @@
-# Goomer Menu API
+**Esse projeto foi um estudo de aplicação de arquitetura hexagonal em ecossistema NodeJS. Essa arquitetura não é adequada para projetos pequenos.**
+
 ## 📋 Cenário do Projeto
 
 Decidi conduzir o projeto com o seguinte cenário fictício em mente:
